@@ -388,7 +388,7 @@ class FunctionalEnrichmentUtil:
 
         return parent_ids
 
-    def _get_kegg_parents(kegg):
+    def _get_kegg_parents(self, kegg):
         ### This file is a hierarchical map of kegg IDs
         with open('/kb/module/data/br08201.json', 'r') as f:
             kegg_reactions = json.load(f)
@@ -442,7 +442,7 @@ class FunctionalEnrichmentUtil:
 
         return kegg_id_reaction_ids
 
-    def _get_ec_parents(ecs):
+    def _get_ec_parents(self, ecs):
 
         #ecs=list(ontology_hash.keys())
         ec_id_parent_id={}
@@ -465,9 +465,9 @@ class FunctionalEnrichmentUtil:
         return ec_id_parent_id
 
 
-    def _get_metacyc_reactions(metacyc):
+    def _get_metacyc_reactions(self, metacyc):
 
-        def pathways_to_reactions(pathway):
+        def pathways_to_reactions(self, pathway):
             pathway_reacionts=[]
             for chunk in metacyc_raw.split('</Reaction>'):
                 if pathway in chunk:
@@ -504,7 +504,7 @@ class FunctionalEnrichmentUtil:
         return metacyc_id_pathway_id
 
 
-    def _parents_from_all_terms(ontology_hash):
+    def _parents_from_all_terms(self, ontology_hash):
 
         all_ids=list(ontology_hash.keys())
         go_ids=[]
@@ -603,7 +603,7 @@ class FunctionalEnrichmentUtil:
         return ids_with_parents
 
 
-    def _translate_terms(ids, table):
+    def _translate_terms(self, ids, table):
         translated_ids=[]
         for id in ids:
             full_reaction=[]
@@ -617,7 +617,7 @@ class FunctionalEnrichmentUtil:
 
 
 
-    def _get_go_parents(ontology_hash, go_id, is_a_relationship,
+    def _get_go_parents(self, ontology_hash, go_id, is_a_relationship,
                             regulates_relationship, part_of_relationship):
 
         grand_parent_ids=[]
@@ -643,9 +643,7 @@ class FunctionalEnrichmentUtil:
         fetch_result={}
         if orthology_type=='GO':
             for go_id in go_ids:
-                fetch_result[go_id]=self._get_go_parents(ontology_hash, go_id,
-                                                         is_a_relationship, regulates_relationship,
-                                                         part_of_relationship)
+                fetch_result[go_id]=self._get_go_parents(ontology_hash, go_id, is_a_relationship, regulates_relationship, part_of_relationship)
 
             return fetch_result
 
