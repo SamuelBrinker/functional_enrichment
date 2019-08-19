@@ -32,7 +32,7 @@ module samuelbrinkerfunctional_enrichment_update {
         boolean ignore_go_term_not_in_feature_set;
         string orthology_type;
 
-    } ReportResults;
+    } AppInput;
     typedef structure{
         string result_directory;
         string report_name;
@@ -41,6 +41,6 @@ module samuelbrinkerfunctional_enrichment_update {
     /*
         This example function accepts any number of parameters and returns results in a KBaseReport
     */
-    funcdef run_samuelbrinkerfunctional_enrichment_update(mapping<string,UnspecifiedObject> params) returns (ReportResults output) authentication required;
+    funcdef run_samuelbrinkerfunctional_enrichment_update(AppInput params) returns (ReportResults output) authentication required;
 
 };
