@@ -266,7 +266,7 @@ class FunctionalEnrichmentUtil:
                             'description': 'HTML summary report for Functional Enrichment App'})
         return html_report
 
-    def _get_go_maps_from_genome(self, genome_ref):
+    def _get_go_maps_from_genome(self, genome_ref,orthology_type):
         """
         _search_genome: search genome data
         """
@@ -636,7 +636,7 @@ class FunctionalEnrichmentUtil:
 
 
     def _fetch_all_parents_go_ids(self, ontology_hash, go_ids, is_a_relationship,
-                                  regulates_relationship, part_of_relationship):
+                                  regulates_relationship, part_of_relationship,orthology_type):
         '''
         _fetch_all_parents_go_ids: recusively fetch all parent go_ids
         '''
@@ -663,7 +663,7 @@ class FunctionalEnrichmentUtil:
         else:
             return {go_id: []}
 
-    def _generate_parent_child_map(self, ontology_hash, go_ids,
+    def _generate_parent_child_map(self, ontology_hash, go_ids,orthology_type,
                                    is_a_relationship=True,
                                    regulates_relationship=True,
                                    part_of_relationship=False):
@@ -679,7 +679,7 @@ class FunctionalEnrichmentUtil:
         fetch_result = self._fetch_all_parents_go_ids(ontology_hash, go_ids,
                                                           is_a_relationship,
                                                           regulates_relationship,
-                                                          part_of_relationship)
+                                                          part_of_relationship,orthology_type)
 
         go_id_parent_ids_map.update(fetch_result)
 
@@ -734,7 +734,7 @@ class FunctionalEnrichmentUtil:
 
         self._validate_run_fe1_params(params)
         print(params)
-        
+
         propagation = params.get('propagation', True)
         orthology_type = params.get('orthology_type', 'GO') ######################################################## Needs to be added
         filter_ref_features = params.get('filter_ref_features', False)
@@ -755,7 +755,7 @@ class FunctionalEnrichmentUtil:
         (feature_id_go_id_list_map,
          go_id_feature_id_list_map,
          go_id_go_term_map,
-         feature_id_feature_info_map) = self._get_go_maps_from_genome(genome_ref)
+         feature_id_feature_info_map) = self._get_go_maps_from_genome(genome_ref,orthology_type)
 
         if not len(feature_id_go_id_list_map):
             raise ValueError("No features in the referenced genome ({}) contain ontology mappings"
@@ -792,7 +792,7 @@ class FunctionalEnrichmentUtil:
 
         if propagation:
             go_id_parent_ids_map = self._generate_parent_child_map(ontology_hash,
-                                                                   list(go_id_go_term_map.keys()),
+                                                                   list(go_id_go_term_map.keys()),orthology_type
                                                                    regulates_relationship=False)
         else:
             go_id_parent_ids_map = {}

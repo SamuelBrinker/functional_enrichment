@@ -49,7 +49,7 @@ module samuelbrinkerfunctional_enrichment_update {
         funcdef run_samuelbrinkerfunctional_enrichment_update(mapping<string,UnspecifiedObject> params) returns (ReportResults output) authentication required;
 
     */
-
+    
     funcdef run_samuelbrinkerfunctional_enrichment_update(AppInput params) returns (ReportResults output) authentication required;
 
 };
