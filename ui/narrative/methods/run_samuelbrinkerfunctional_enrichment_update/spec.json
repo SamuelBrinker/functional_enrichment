@@ -118,6 +118,10 @@
                   "target_property" : "propagation"
               },
               {
+                  "input_parameter" : "orthology_type",
+                  "target_property" : "orthology_type"
+              },
+              {
                   "constant_value"  : 1,
                   "target_property" : "filter_ref_features"
               },
