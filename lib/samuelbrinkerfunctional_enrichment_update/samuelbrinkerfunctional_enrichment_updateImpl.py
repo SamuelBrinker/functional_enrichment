@@ -52,6 +52,7 @@ class samuelbrinkerfunctional_enrichment_update:
         # return variables are: returnVal
         #BEGIN run_samuelbrinkerfunctional_enrichment_update
         print('--->\nRunning run_enrichment_update\nparams:')
+        print(params)
         print(json.dumps(params, indent=1))
 
 
