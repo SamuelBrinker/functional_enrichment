@@ -451,10 +451,6 @@ class FunctionalEnrichmentUtil:
                     for cat2 in cat['children']:
                         for cat3 in cat2['children']:
                             if id.replace('R','') in cat3['name']:
-
-
-
-
         return kegg_id_reaction_ids
 
     def _get_ec_parents(ecs):
