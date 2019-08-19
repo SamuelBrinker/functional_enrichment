@@ -395,6 +395,7 @@ class Application(object):
                                'method': ctx['method'],
                                'method_params': req['params']
                                }
+                print(req,'req')
                 ctx['provenance'] = [prov_action]
                 try:
                     token = environ.get('HTTP_AUTHORIZATION')
@@ -584,7 +585,7 @@ def process_async_cli(input_file_path, output_file_path, token):
 
     print(req)
 
-    
+
     ctx['provenance'] = [prov_action]
     resp = None
     try:
