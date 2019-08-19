@@ -744,6 +744,9 @@ class FunctionalEnrichmentUtil:
         result_directory = os.path.join(self.scratch, str(uuid.uuid4()))
         self._mkdir_p(result_directory)
 
+
+        print(orthology_type)
+
         feature_set_ids, genome_ref = self._process_feature_set(params.get('feature_set_ref'))
 
         ############################################
@@ -792,7 +795,7 @@ class FunctionalEnrichmentUtil:
 
         if propagation:
             go_id_parent_ids_map = self._generate_parent_child_map(ontology_hash,
-                                                                   list(go_id_go_term_map.keys()),orthology_type
+                                                                   list(go_id_go_term_map.keys()),orthology_type,
                                                                    regulates_relationship=False)
         else:
             go_id_parent_ids_map = {}
