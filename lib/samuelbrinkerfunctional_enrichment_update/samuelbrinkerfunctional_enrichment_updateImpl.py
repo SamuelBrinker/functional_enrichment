@@ -66,7 +66,7 @@ class samuelbrinkerfunctional_enrichment_update:
 
         fe1_runner = FunctionalEnrichmentUtil(self.config)
         returnVal=[]
-        returnVal = fe1_runner.run_samuelbrinkerfunctional_enrichment_update(params)
+        returnVal = fe1_runner.run_fe1(params)
         #END run_samuelbrinkerfunctional_enrichment_update
 
         # At some point might do deeper type checking...
