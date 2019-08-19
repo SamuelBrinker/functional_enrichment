@@ -496,7 +496,7 @@ class FunctionalEnrichmentUtil:
                             if 'Pathway' in line:
                                 pathways.append(line.split("<Pathway resource='getxml?")[1].split("' orgid")[0])
             for path in pathways:
-                pathway_reacionts=pathways_to_reactions(path)
+                pathway_reacionts=self.pathways_to_reactions(path)
                 for reaction in pathway_reacionts:
                     if reaction in metacyc and reaction !=meta:
                         metacyc_id_pathway_id[meta].append(reaction)
@@ -539,34 +539,34 @@ class FunctionalEnrichmentUtil:
         if go_ids!=[]:
             go_parents={}
             for go_id in go_ids:
-                go_parents[go_id]=_get_go_parents(ontology_hash, go_id,
+                go_parents[go_id]=self._get_go_parents(ontology_hash, go_id,
                                                          is_a_relationship, regulates_relationship,
                                                          part_of_relationship)
             with open('/kb/module/data/GO.ModelSEED.json', 'r') as f:
                 table = json.load(f)
                 f.close()
-            go_reactions= _translate_terms( list(go_parents.keys()) , table )
+            go_reactions= self._translate_terms( list(go_parents.keys()) , table )
 
         if kegg_ids!=[]:
-            kegg_parents= _get_kegg_parents(kegg_ids)
+            kegg_parents= self._get_kegg_parents(kegg_ids)
             with open('/kb/module/data/KEGG_RXN.ModelSEED.json', 'r') as f:
                 table = json.load(f)
                 f.close()
-            kegg_reactions= _translate_terms( list(kegg_parents.keys()) , table )
+            kegg_reactions= self._translate_terms( list(kegg_parents.keys()) , table )
 
         if ec_ids!=[]:
-            ec_parents= _get_ec_parents(ec_ids)
+            ec_parents= self._get_ec_parents(ec_ids)
             with open('/kb/module/data/EBI_EC.ModelSEED.json', 'r') as f:
                 table = json.load(f)
                 f.close()
-            ec_reactions= _translate_terms( list(ec_parents.keys()) , table )
+            ec_reactions= self._translate_terms( list(ec_parents.keys()) , table )
 
         if metacyc_ids!=[]:
-            metacyc_parents= _get_metacyc_reactions(metacyc_ids)
+            metacyc_parents= self._get_metacyc_reactions(metacyc_ids)
             with open('/kb/module/data/Metacyc_RXN.ModelSEED.json', 'r') as f:
                 table = json.load(f)
                 f.close()
-            metacyc_reactions= _translate_terms( list(metacyc_parents.keys()) , table )
+            metacyc_reactions= self._translate_terms( list(metacyc_parents.keys()) , table )
 
         all_parents.append(go_parents)
         all_parents.append(kegg_parents)
@@ -643,7 +643,7 @@ class FunctionalEnrichmentUtil:
         fetch_result={}
         if orthology_type=='GO':
             for go_id in go_ids:
-                fetch_result[go_id]=_get_go_parents(ontology_hash, go_id,
+                fetch_result[go_id]=self._get_go_parents(ontology_hash, go_id,
                                                          is_a_relationship, regulates_relationship,
                                                          part_of_relationship)
 
@@ -651,15 +651,15 @@ class FunctionalEnrichmentUtil:
 
         elif orthology_type=='Kegg':
             kegg=list(ontology_hash.keys())
-            return _get_kegg_parents(go_ids)
+            return self._get_kegg_parents(go_ids)
         elif orthology_type=='EC':
             #ecs=list(ontology_hash.keys())
-            return _get_ec_parents(go_ids)
+            return self._get_ec_parents(go_ids)
         elif orthology_type=='MetaCyc':
             #metacyc=list(ontology_hash.keys())
-            return _get_metacyc_reactions(go_ids)
+            return self._get_metacyc_reactions(go_ids)
         elif orthology_type=='all_terms':
-            return _parents_from_all_terms(ontology_hash)
+            return self._parents_from_all_terms(ontology_hash)
         else:
             return {go_id: []}
 
