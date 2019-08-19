@@ -1,0 +1,69 @@
+#
+# define display information
+#
+name: Functional Enrichment for Annotation Terms
+
+tooltip: |
+    Compute gene annotation term enrichment for genomic features.
+
+screenshots: []
+
+icon: icon.png
+
+#
+# define a set of similar apps that might be useful to the user
+#
+method-suggestions :
+    related :
+        []
+    next :
+        []
+
+#
+# Configure the display and description of parameters
+#
+parameters :
+  feature_set_ref :
+    ui-name : |
+      FeatureSet Object
+    short-hint : |
+      The FeatureSet object for which to compute GO terms.
+
+  propagation :
+    ui-name : |
+      Parent-Child Term Propagation
+    short-hint : |
+      Apply GO term parent-child relationships to add parent term annotations.
+
+  # filter_ref_features :
+  #   ui-name : |
+  #     Do Not Compute Enrichment For Unlabeled Features
+  #   short-hint : |
+  #     Exclude reference genome features with no GO term annotations
+
+  statistical_significance :
+    ui-name : |
+      Statistical Test
+    short-hint : |
+      Left or right-tailed Fisher Exact test for statistical significance.
+  orthology_type :
+    ui-name : |
+      Type of onthology to be enriched
+    short-hint : |
+      Use GO, Kegg, MetaCyc or EC IDs for enrichment
+
+description : |
+    <p>This App uses the FeatureSet data object (gene identifiers) as an input. The genome from which FeatureSet has been extracted, must have gene ontology (GO) terms and must be imported into the same Narrative. This App identifies the enriched GO terms in a list of the gene identifiers and uses the one-sided Fisher Exact test to test for enrichment. Fisher Exact Test is a statistical test based on contingency tables to study the significance of the association between two kind of classifications. This App generates an enrichment table as an output widget that includes the basic functionality of annotation with GO IDs, its description, domain ontologies (e.g., biological process, molecular function, cellular process), number of genes annotated with the GO term in the FeatureSet, number of genes annotated with the GO term in the whole genome, p-value, and corrected p-value. This App also generates the supporting files as a report that includes several files such as input feature set IDs, intermediate files on mapping, and output file of feature IDs with GO terms. </p>
+
+    <p><strong>NOTE:</strong> This App can be used as one of the downstream steps in the <a href= "http://kbase.us/expression-analysis/">Transcriptomics and Expression Analysis Workflow</a> in KBase, however, it can also be run as a standalone.</p>
+
+publications :
+    -
+        display-text: |
+            Ashburner M, Ball CA, Blake JA, Botstein D, Butler H, Cherry JM, et al. Gene ontology: tool for the unification of biology. The Gene Ontology Consortium. Nat Genet. 2000;25: 25–29. doi:10.1038/75556
+        link: https://www.nature.com/articles/ng0500_25
+
+    -
+        display-text: |
+            The Gene Ontology Consortium. Expansion of the Gene Ontology knowledgebase and resources. Nucleic Acids Res. 2017;45: D331–D338. doi:10.1093/nar/gkw1108
+        link: https://academic.oup.com/nar/article/45/D1/D331/2605810

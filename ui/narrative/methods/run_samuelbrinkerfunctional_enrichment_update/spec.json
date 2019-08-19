@@ -1,0 +1,157 @@
+{
+    "ver": "0.0.1",
+    "authors": [
+        "samuelbrinker"
+    ],
+    "contact": "",
+    "categories": ["active","comparative_genomics","expression"],
+    "widgets": {
+      "input" : "kbaseNarrativeMethodInput",
+      "output" : "no-display"
+    },
+    "parameters": [{
+      "id" : "feature_set_ref",
+      "optional" : false,
+      "advanced" : false,
+      "allow_multiple" : false,
+      "default_values" : [ "" ],
+      "field_type" : "text",
+      "text_options" : {
+        "valid_ws_types" : ["KBaseCollections.FeatureSet"]
+      }
+    },
+    {
+      "id": "propagation",
+      "optional":true,
+      "advanced":false,
+      "allow_multiple":false,
+      "default_values":["1"],
+      "field_type" : "checkbox",
+      "checkbox_options":{
+          "checked_value": 1,
+          "unchecked_value": 0
+      }
+    },
+    {
+      "id": "statistical_significance",
+      "optional": false,
+      "advanced": false,
+      "allow_multiple": false,
+      "default_values": ["right_tailed"],
+      "field_type": "dropdown",
+      "dropdown_options":{
+          "options": [
+          {
+            "display": "Over Representation (Right Tailed)",
+            "value": "right_tailed",
+            "id": "right_tailed",
+            "ui_name": "right_tailed"
+          },
+          {
+            "display": "Under Representation (Left Tailed)",
+            "value": "left_tailed",
+            "id": "left_tailed",
+            "ui_name": "left_tailed"
+          }
+        ]
+      }
+    },
+    {
+      "id": "orthology_type",
+      "optional": false,
+      "advanced": false,
+      "allow_multiple": false,
+      "default_values": ["GO"],
+      "field_type": "dropdown",
+      "dropdown_options":{
+          "options": [
+          {
+            "display": "Gene Ontology (GO)",
+            "value": "GO",
+            "id": "GO",
+            "ui_name": "GO"
+          },
+          {
+            "display": "Kegg Reacions (RO)",
+            "value": "Kegg",
+            "id": "Kegg",
+            "ui_name": "Kegg"
+          },
+          {
+            "display": "Enzyme Comission (EC)",
+            "value": "EC",
+            "id": "EC",
+            "ui_name": "EC"
+          },
+          {
+            "display": "MetaCyc Reactions",
+            "value": "MetaCyc",
+            "id": "MetaCyc",
+            "ui_name": "MetaCyc"
+          },
+          {
+            "display": "Consider all stated reaction types",
+            "value": "all_terms",
+            "id": "all_terms",
+            "ui_name": "all_terms"
+          }
+        ]
+      }
+    }],
+    "behavior": {
+        "service-mapping": {
+            "url": "",
+            "name": "samuelbrinkerfunctional_enrichment_update",
+            "method": "run_samuelbrinkerfunctional_enrichment_update",
+            "input_mapping": [
+              {
+                "narrative_system_variable": "workspace",
+                "target_property" : "workspace_name"
+              },
+              {
+                "input_parameter" : "feature_set_ref",
+                "target_type_transform": "resolved-ref",
+                "target_property" : "feature_set_ref"
+              },
+              {
+                  "input_parameter" : "propagation",
+                  "target_property" : "propagation"
+              },
+              {
+                  "constant_value"  : 1,
+                  "target_property" : "filter_ref_features"
+              },
+              {
+                  "input_parameter" : "statistical_significance",
+                  "target_property" : "statistical_significance"
+              },
+              {
+                  "constant_value"  : 1,
+                  "target_property" : "ignore_go_term_not_in_feature_set"
+              }],
+            "output_mapping": [
+              {
+                "service_method_output_path": [0, "result_directory"],
+                "target_property": "result_directory"
+              },
+              {
+                "service_method_output_path": [0,"report_name"],
+                "target_property": "report_name"
+              },
+              {
+                "service_method_output_path": [0,"report_ref"],
+                "target_property": "report_ref"
+              },
+              {
+                "constant_value": "16",
+                "target_property": "report_window_line_height"
+              },
+              {
+                "narrative_system_variable": "workspace",
+                "target_property": "wsName"
+              }
+            ]
+        }
+    },
+    "job_id_output_field": "docker"
+}
