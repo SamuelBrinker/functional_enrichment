@@ -20,7 +20,8 @@ from rpy2.robjects.vectors import FloatVector
 #from DataFileUtil.DataFileUtilClient import DataFileUtil
 #from KBaseReport.KBaseReportClient import KBaseReport
 #from Workspace.WorkspaceClient import Workspace as Workspace
-
+from installed_clients.DataFileUtilClient import DataFileUtil
+from installed_clients.WorkspaceClient import Workspace
 
 def log(message, prefix_newline=False):
     """Logging function, provides a hook to suppress or redirect log messages."""
