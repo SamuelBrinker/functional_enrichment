@@ -566,6 +566,7 @@ def process_async_cli(input_file_path, output_file_path, token):
     exit_code = 0
     with open(input_file_path) as data_file:
         req = json.load(data_file)
+        print(req,'req')
     if 'version' not in req:
         req['version'] = '1.1'
     if 'id' not in req:
@@ -583,7 +584,7 @@ def process_async_cli(input_file_path, output_file_path, token):
     prov_action = {'service': ctx['module'], 'method': ctx['method'],
                    'method_params': req['params']}
 
-    print(req,'req')
+    print(req,'req\n',prove_action)
 
 
     ctx['provenance'] = [prov_action]
