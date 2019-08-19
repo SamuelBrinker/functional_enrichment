@@ -733,6 +733,7 @@ class FunctionalEnrichmentUtil:
             f'params:\n{json.dumps(params, indent=1)}')
 
         self._validate_run_fe1_params(params)
+        print(params)
         propagation = params.get('propagation', True)
         orthology_type = params.get('orthology_type', 'GO') ######################################################## Needs to be added
         filter_ref_features = params.get('filter_ref_features', False)
