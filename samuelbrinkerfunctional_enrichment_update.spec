@@ -16,6 +16,7 @@ module samuelbrinkerfunctional_enrichment_update {
       required params:
       feature_set_ref: FeatureSet object reference
       workspace_name: the name of the workspace it gets saved to
+      orthology_type: what to run
 
       optional params:
       propagation: includes is_a relationship to all go terms (default is 1)
@@ -33,6 +34,7 @@ module samuelbrinkerfunctional_enrichment_update {
         string orthology_type;
 
     } AppInput;
+
     typedef structure{
         string result_directory;
         string report_name;
@@ -41,6 +43,7 @@ module samuelbrinkerfunctional_enrichment_update {
     /*
         This example function accepts any number of parameters and returns results in a KBaseReport
     */
+    print(AppInput)
     funcdef run_samuelbrinkerfunctional_enrichment_update(AppInput params) returns (ReportResults output) authentication required;
 
 };
