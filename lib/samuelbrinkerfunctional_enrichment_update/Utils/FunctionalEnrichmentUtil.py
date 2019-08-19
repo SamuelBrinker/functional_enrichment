@@ -16,7 +16,7 @@ from rpy2.robjects.vectors import FloatVector
 #from installed_clients.KBaseReportClient import KBaseReport
 #from GenomeSearchUtil.GenomeSearchUtilImpl import GenomeSearchUtil
 #from GenomeFileUtil.GenomeFileUtilClient import GenomeFileUtil
-#from installed_clients.GenomeSearchUtilClient import GenomeSearchUtil
+from installed_clients.GenomeSearchUtilClient import GenomeSearchUtil
 #from DataFileUtil.DataFileUtilClient import DataFileUtil
 #from KBaseReport.KBaseReportClient import KBaseReport
 #from Workspace.WorkspaceClient import Workspace as Workspace
