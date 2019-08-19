@@ -53,11 +53,8 @@ class samuelbrinkerfunctional_enrichment_update:
         #BEGIN run_samuelbrinkerfunctional_enrichment_update
         print('--->\nRunning run_enrichment_update\nparams:')
         print(params)
+        print(ctx)
         print(json.dumps(params, indent=1))
-
-
-
-
 
         if isinstance(params, dict):
             for key, value in params.items():
