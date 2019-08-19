@@ -91,6 +91,7 @@ class JSONRPCServiceCustom(JSONRPCService):
         #Calls given method with given params and returns it value.
         method = self.method_data[request['method']]['method']
         params = request['params']
+        print(params,' IS THIS IT?!\n\n\n')
         result = None
         try:
             if isinstance(params, list):
@@ -102,7 +103,7 @@ class JSONRPCServiceCustom(JSONRPCService):
                         self._max_args(method) - 1):
                     raise InvalidParamsError('too many arguments')
 
-                result = method(ctx, *params)
+                result = method(ctx, *params)   ##########################################################
             elif isinstance(params, dict):
                 # Do not accept keyword arguments if the jsonrpc version is
                 # not >=1.1.

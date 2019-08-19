@@ -64,8 +64,8 @@ class samuelbrinkerfunctional_enrichment_update:
         fe1_runner = FunctionalEnrichmentUtil(self.config)
         returnVal=[]
         returnVal = fe1_runner.run_fe1(params)
-        #END run_samuelbrinkerfunctional_enrichment_update
 
+        #E_N_D run_samuelbrinkerfunctional_enrichment_update
         # At some point might do deeper type checking...
         if not isinstance(returnVal, dict):
             raise ValueError('Method run_enrichment_update return value ' +
@@ -73,6 +73,7 @@ class samuelbrinkerfunctional_enrichment_update:
         # return the results
 
         return [returnVal]
+        #END run_samuelbrinkerfunctional_enrichment_update
     def status(self, ctx):
         #BEGIN_STATUS
         returnVal = {'state': "OK",
