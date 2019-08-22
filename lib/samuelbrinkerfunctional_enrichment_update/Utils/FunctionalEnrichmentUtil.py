@@ -357,8 +357,8 @@ class FunctionalEnrichmentUtil:
 
 
         #####################################################
-    def _get_immediate_parents(self, ontology_hash, go_id, is_a_relationship,
-                               regulates_relationship, part_of_relationship):
+    def _get_immediate_parents(self, ontology_hash, go_id, is_a_relationship=True,
+                               regulates_relationship=True, part_of_relationship=False):
         """
         _get_immediate_parents: get immediate parents go_ids for a given go_id
         """
@@ -523,7 +523,7 @@ class FunctionalEnrichmentUtil:
         return metacyc_id_pathway_id
 
 
-    def _parents_from_all_terms(self, ontology_hash):
+    def _parents_from_all_terms(self, ontology_hash, is_a_relationship=True, regulates_relationship=True, part_of_relationship=False):
 
         all_ids=list(ontology_hash.keys())
         go_ids=[]
@@ -636,8 +636,8 @@ class FunctionalEnrichmentUtil:
 
 
 
-    def _get_go_parents(self, ontology_hash, go_id, is_a_relationship,
-                            regulates_relationship, part_of_relationship):
+    def _get_go_parents(self, ontology_hash, go_id, is_a_relationship=True,
+                            regulates_relationship=True, part_of_relationship=False):
 
         grand_parent_ids=[]
         parent_ids = self._get_immediate_parents(ontology_hash, go_id,
@@ -654,8 +654,8 @@ class FunctionalEnrichmentUtil:
         return list(set(grand_parent_ids))
 
 
-    def _fetch_all_parents_go_ids(self, ontology_hash, go_ids, is_a_relationship,
-                                  regulates_relationship, part_of_relationship,orthology_type):
+    def _fetch_all_parents_go_ids(self, ontology_hash, go_ids, is_a_relationship=True,
+                                  regulates_relationship=True, part_of_relationship,orthology_type=False):
         '''
         _fetch_all_parents_go_ids: recusively fetch all parent go_ids
         '''
@@ -676,7 +676,8 @@ class FunctionalEnrichmentUtil:
             #metacyc=list(ontology_hash.keys())
             return self._get_metacyc_reactions(go_ids)
         elif orthology_type=='all_terms':
-            return self._parents_from_all_terms(ontology_hash)
+            return self._parents_from_all_terms(ontology_hash,  is_a_relationship,
+                                          regulates_relationship, part_of_relationship)
         else:
             return {go_id: []}
 
@@ -693,10 +694,7 @@ class FunctionalEnrichmentUtil:
 
         go_id_parent_ids_map = {}
 
-        fetch_result = self._fetch_all_parents_go_ids(ontology_hash, go_ids,
-                                                          is_a_relationship,
-                                                          regulates_relationship,
-                                                          part_of_relationship,orthology_type)
+        fetch_result = self._fetch_all_parents_go_ids(ontology_hash, go_ids, is_a_relationship, regulates_relationship, part_of_relationship,orthology_type)
 
         go_id_parent_ids_map.update(fetch_result)
 
