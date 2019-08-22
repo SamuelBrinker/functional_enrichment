@@ -693,7 +693,7 @@ class FunctionalEnrichmentUtil:
         else:
             return {go_id: []}
 
-    def _generate_parent_child_map(self, ontology_hash, go_ids,orthology_type,
+    def _generate_parent_child_map(self, ontology_hash, go_ids,orthology_type,translate_ids,
                                    is_a_relationship=True,
                                    regulates_relationship=True,
                                    part_of_relationship=False):
@@ -822,7 +822,7 @@ class FunctionalEnrichmentUtil:
 
         if propagation:
             go_id_parent_ids_map = self._generate_parent_child_map(ontology_hash,
-                                                                   list(go_id_go_term_map.keys()),orthology_type,
+                                                                   list(go_id_go_term_map.keys()),orthology_type,translate_ids,
                                                                    regulates_relationship=False)
         else:
             go_id_parent_ids_map = {}
