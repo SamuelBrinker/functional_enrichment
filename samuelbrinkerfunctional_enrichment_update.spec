@@ -33,6 +33,7 @@ module samuelbrinkerfunctional_enrichment_update {
         string statistical_significance;
         string orthology_type;
         boolean ignore_go_term_not_in_feature_set;
+        boolean translate_ids;
     }AppInput;
 
     /*
