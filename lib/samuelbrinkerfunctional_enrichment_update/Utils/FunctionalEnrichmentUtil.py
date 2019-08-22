@@ -395,6 +395,7 @@ class FunctionalEnrichmentUtil:
             f.close()
 
         #kegg=list(ontology_hash.keys())
+        print("Getting Kegg parents")
         kegg_id_reaction_ids={}
          ####change
         kegg_id_reaction_ids={}
@@ -465,7 +466,7 @@ class FunctionalEnrichmentUtil:
 
         #ecs=list(ontology_hash.keys())
         ec_id_parent_id={}
-
+        print("Getting EC Parents")
         for ec in ecs:
             split_ec=ec.split('.')
             while len(split_ec)<4:
@@ -500,7 +501,7 @@ class FunctionalEnrichmentUtil:
 
         #metacyc=list(ontology_hash.keys())
         metacyc_id_pathway_id={}
-
+        print("Getting MetaCyc parents")
         for meta in metacyc:
             metacyc_id_pathway_id[meta]=[]
             pathway_reacionts=[]
@@ -544,7 +545,7 @@ class FunctionalEnrichmentUtil:
         metacyc_parents={}
 
         ids_with_parents={}
-
+        print("Getting All Parents")
         for id in all_ids:
             if 'GO:' in id.upper():
                 go_ids.append(id)
@@ -557,6 +558,7 @@ class FunctionalEnrichmentUtil:
 
         if go_ids!=[]:
             go_parents={}
+            print("Getting GO Parents")
             for go_id in go_ids:
                 go_parents[go_id]=self._get_go_parents(ontology_hash, go_id,
                                                          is_a_relationship, regulates_relationship,
@@ -564,6 +566,7 @@ class FunctionalEnrichmentUtil:
             with open('/kb/module/data/GO.ModelSEED.json', 'r') as f:
                 table = json.load(f)
                 f.close()
+            print("Translating GO terms")
             go_reactions= self._translate_terms( list(go_parents.keys()) , table )
 
         if kegg_ids!=[]:
@@ -571,6 +574,7 @@ class FunctionalEnrichmentUtil:
             with open('/kb/module/data/KEGG_RXN.ModelSEED.json', 'r') as f:
                 table = json.load(f)
                 f.close()
+            print("Translating Kegg terms")
             kegg_reactions= self._translate_terms( list(kegg_parents.keys()) , table )
 
         if ec_ids!=[]:
@@ -578,6 +582,7 @@ class FunctionalEnrichmentUtil:
             with open('/kb/module/data/EBI_EC.ModelSEED.json', 'r') as f:
                 table = json.load(f)
                 f.close()
+            print("Translating EC terms")
             ec_reactions= self._translate_terms( list(ec_parents.keys()) , table )
 
         if metacyc_ids!=[]:
@@ -585,6 +590,7 @@ class FunctionalEnrichmentUtil:
             with open('/kb/module/data/Metacyc_RXN.ModelSEED.json', 'r') as f:
                 table = json.load(f)
                 f.close()
+            print("Translating MetaCyc terms")
             metacyc_reactions= self._translate_terms( list(metacyc_parents.keys()) , table )
 
         all_parents.append(go_parents)
@@ -597,6 +603,7 @@ class FunctionalEnrichmentUtil:
         all_reactions.append(ec_reactions)
         all_reactions.append(metacyc_reactions)
 
+        print("Comparing reactions")
         for bunch in all_reactions:
             bunch_term= all_reactions.index(bunch)
             for comparison in all_reactions:
@@ -661,6 +668,7 @@ class FunctionalEnrichmentUtil:
         '''
         fetch_result={}
         if orthology_type=='GO':
+            print("Getting GO Parents")
             for go_id in go_ids:
                 fetch_result[go_id]=self._get_go_parents(ontology_hash, go_id, is_a_relationship, regulates_relationship, part_of_relationship)
 
