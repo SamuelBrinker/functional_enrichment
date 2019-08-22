@@ -439,6 +439,25 @@ class FunctionalEnrichmentUtil:
                             true_reactions.append(other_reaction)
                 kegg_id_reaction_ids[id]=true_reactions
 
+        with open('/kb/module/data/br08901.json', 'r') as f:
+            kegg_reactions = json.load(f)
+            f.close()
+        for id in kegg:
+            true_reactions=[]
+            parrent_ids=[]
+            base_level=''
+            early_break=False
+            for cat in  kegg_reactions['children']:
+                for cat2 in cat['children']:
+                    for cat3 in cat2['children']:
+                        if id.replace('R','') in str(cat3['name']):
+                            for cat_check in cat2['children']:
+                                for all_id in kegg:
+                                    if all_id.replace('R','') in str(cat_check['name']) and all_id !=id:
+                                        if id not in kegg_id_reaction_ids.keys():
+                                            kegg_id_reaction_ids[id]=[all_id]
+                                        elif all_id not in kegg_id_reaction_ids[id]:
+                                            kegg_id_reaction_ids[id]=kegg_id_reaction_ids[id] +[all_id]
 
         return kegg_id_reaction_ids
 
