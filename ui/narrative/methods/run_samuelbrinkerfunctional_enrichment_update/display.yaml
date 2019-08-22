@@ -34,6 +34,11 @@ parameters :
       Parent-Child Term Propagation
     short-hint : |
       Apply GO term parent-child relationships to add parent term annotations.
+  translate_ids :
+    ui-name : |
+      Preform enrichment between annotation formats
+    short-hint : |
+      Translate IDs into Moddel SEED reactions and looks for analogs. Only when considering all terms
 
   # filter_ref_features :
   #   ui-name : |

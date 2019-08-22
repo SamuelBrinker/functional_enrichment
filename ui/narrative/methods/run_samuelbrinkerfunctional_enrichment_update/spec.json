@@ -33,27 +33,15 @@
       }
     },
     {
-      "id": "statistical_significance",
-      "optional": false,
-      "advanced": false,
-      "allow_multiple": false,
-      "default_values": ["right_tailed"],
-      "field_type": "dropdown",
-      "dropdown_options":{
-          "options": [
-          {
-            "display": "Over Representation (Right Tailed)",
-            "value": "right_tailed",
-            "id": "right_tailed",
-            "ui_name": "right_tailed"
-          },
-          {
-            "display": "Under Representation (Left Tailed)",
-            "value": "left_tailed",
-            "id": "left_tailed",
-            "ui_name": "left_tailed"
-          }
-        ]
+      "id": "translate_ids",
+      "optional":true,
+      "advanced":false,
+      "allow_multiple":false,
+      "default_values":["0"],
+      "field_type" : "checkbox",
+      "checkbox_options":{
+          "checked_value": 1,
+          "unchecked_value": 0
       }
     },
     {
@@ -94,6 +82,30 @@
             "value": "all_terms",
             "id": "all_terms",
             "ui_name": "all_terms"
+          }
+        ]
+      }
+    },
+    {
+      "id": "statistical_significance",
+      "optional": false,
+      "advanced": false,
+      "allow_multiple": false,
+      "default_values": ["right_tailed"],
+      "field_type": "dropdown",
+      "dropdown_options":{
+          "options": [
+          {
+            "display": "Over Representation (Right Tailed)",
+            "value": "right_tailed",
+            "id": "right_tailed",
+            "ui_name": "right_tailed"
+          },
+          {
+            "display": "Under Representation (Left Tailed)",
+            "value": "left_tailed",
+            "id": "left_tailed",
+            "ui_name": "left_tailed"
           }
         ]
       }
