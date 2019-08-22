@@ -524,7 +524,7 @@ class FunctionalEnrichmentUtil:
         return metacyc_id_pathway_id
 
 
-    def _parents_from_all_terms(self, ontology_hash, is_a_relationship=True, regulates_relationship=True, part_of_relationship=False):
+    def _parents_from_all_terms(self, ontology_hash, translate_ids, is_a_relationship=True, regulates_relationship=True, part_of_relationship=False):
 
         all_ids=list(ontology_hash.keys())
         go_ids=[]
@@ -563,64 +563,68 @@ class FunctionalEnrichmentUtil:
                 go_parents[go_id]=self._get_go_parents(ontology_hash, go_id,
                                                          is_a_relationship, regulates_relationship,
                                                          part_of_relationship)
-            with open('/kb/module/data/GO.ModelSEED.json', 'r') as f:
-                table = json.load(f)
-                f.close()
-            print("Translating GO terms")
-            go_reactions= self._translate_terms( list(go_parents.keys()) , table )
+            if translate_ids:
+                with open('/kb/module/data/GO.ModelSEED.json', 'r') as f:
+                    table = json.load(f)
+                    f.close()
+                print("Translating GO terms")
+                go_reactions= self._translate_terms( list(go_parents.keys()) , table )
 
         if kegg_ids!=[]:
             kegg_parents= self._get_kegg_parents(kegg_ids)
-            with open('/kb/module/data/KEGG_RXN.ModelSEED.json', 'r') as f:
-                table = json.load(f)
-                f.close()
-            print("Translating Kegg terms")
-            kegg_reactions= self._translate_terms( list(kegg_parents.keys()) , table )
+            if translate_ids:
+                with open('/kb/module/data/KEGG_RXN.ModelSEED.json', 'r') as f:
+                    table = json.load(f)
+                    f.close()
+                print("Translating Kegg terms")
+                kegg_reactions= self._translate_terms( list(kegg_parents.keys()) , table )
 
         if ec_ids!=[]:
             ec_parents= self._get_ec_parents(ec_ids)
-            with open('/kb/module/data/EBI_EC.ModelSEED.json', 'r') as f:
-                table = json.load(f)
-                f.close()
-            print("Translating EC terms")
-            ec_reactions= self._translate_terms( list(ec_parents.keys()) , table )
+            if translate_ids:
+                with open('/kb/module/data/EBI_EC.ModelSEED.json', 'r') as f:
+                    table = json.load(f)
+                    f.close()
+                print("Translating EC terms")
+                ec_reactions= self._translate_terms( list(ec_parents.keys()) , table )
 
         if metacyc_ids!=[]:
             metacyc_parents= self._get_metacyc_reactions(metacyc_ids)
-            with open('/kb/module/data/Metacyc_RXN.ModelSEED.json', 'r') as f:
-                table = json.load(f)
-                f.close()
-            print("Translating MetaCyc terms")
-            metacyc_reactions= self._translate_terms( list(metacyc_parents.keys()) , table )
+            if translate_ids:
+                with open('/kb/module/data/Metacyc_RXN.ModelSEED.json', 'r') as f:
+                    table = json.load(f)
+                    f.close()
+                print("Translating MetaCyc terms")
+                metacyc_reactions= self._translate_terms( list(metacyc_parents.keys()) , table )
 
         all_parents.append(go_parents)
         all_parents.append(kegg_parents)
         all_parents.append(ec_parents)
         all_parents.append(metacyc_parents)
+        if translate_ids:
+            all_reactions.append(go_reactions)
+            all_reactions.append(kegg_reactions)
+            all_reactions.append(ec_reactions)
+            all_reactions.append(metacyc_reactions)
+            print("Comparing reactions")
+            for bunch in all_reactions:
+                bunch_term= all_reactions.index(bunch)
+                for comparison in all_reactions:
+                    comparison_term= all_reactions.index(comparison)
+                    if bunch!=comparison:
+                        for bunch_reaction in bunch:
+                            for comparison_reaction in comparison:
+                                if bunch_reaction==comparison_reaction and bunch_reaction!='None' and comparison_reaction!='':
 
-        all_reactions.append(go_reactions)
-        all_reactions.append(kegg_reactions)
-        all_reactions.append(ec_reactions)
-        all_reactions.append(metacyc_reactions)
+                                    bunch_term_position=bunch.index(bunch_reaction)
+                                    comparison_term_position=comparison.index(comparison_reaction)
 
-        print("Comparing reactions")
-        for bunch in all_reactions:
-            bunch_term= all_reactions.index(bunch)
-            for comparison in all_reactions:
-                comparison_term= all_reactions.index(comparison)
-                if bunch!=comparison:
-                    for bunch_reaction in bunch:
-                        for comparison_reaction in comparison:
-                            if bunch_reaction==comparison_reaction and bunch_reaction!='None' and comparison_reaction!='':
+                                    bunch_id=all_parents[bunch_term].keys()[bunch_term_position]
+                                    comparison_id=all_parents[comparison_term].keys()[comparison_term_position]
 
-                                bunch_term_position=bunch.index(bunch_reaction)
-                                comparison_term_position=comparison.index(comparison_reaction)
+                                    all_parents[bunch_term][bunch_id]=all_parents[bunch_term][bunch_id]+all_parents[comparison_term][comparison_id]
+                                    all_parents[bunch_term][bunch_id].append(comparison_id)
 
-                                bunch_id=all_parents[bunch_term].keys()[bunch_term_position]
-                                comparison_id=all_parents[comparison_term].keys()[comparison_term_position]
-
-                                all_parents[bunch_term][bunch_id]=all_parents[bunch_term][bunch_id]+all_parents[comparison_term][comparison_id]
-                                all_parents[bunch_term][bunch_id].append(comparison_id)
 
         for bunch in all_parents:
             ids_with_parents.update(bunch)
@@ -661,7 +665,7 @@ class FunctionalEnrichmentUtil:
         return list(set(grand_parent_ids))
 
 
-    def _fetch_all_parents_go_ids(self, ontology_hash, go_ids,orthology_type, is_a_relationship=True,
+    def _fetch_all_parents_go_ids(self, ontology_hash, go_ids,orthology_type, translate_ids, is_a_relationship=True,
                                   regulates_relationship=True, part_of_relationship=False):
         '''
         _fetch_all_parents_go_ids: recusively fetch all parent go_ids
@@ -684,7 +688,7 @@ class FunctionalEnrichmentUtil:
             #metacyc=list(ontology_hash.keys())
             return self._get_metacyc_reactions(go_ids)
         elif orthology_type=='all_terms':
-            return self._parents_from_all_terms(ontology_hash,  is_a_relationship,
+            return self._parents_from_all_terms(ontology_hash, translate_ids, is_a_relationship,
                                           regulates_relationship, part_of_relationship)
         else:
             return {go_id: []}
@@ -702,7 +706,7 @@ class FunctionalEnrichmentUtil:
 
         go_id_parent_ids_map = {}
 
-        fetch_result = self._fetch_all_parents_go_ids(ontology_hash, go_ids,orthology_type, is_a_relationship, regulates_relationship, part_of_relationship)
+        fetch_result = self._fetch_all_parents_go_ids(ontology_hash, go_ids,orthology_type,translate_ids, is_a_relationship, regulates_relationship, part_of_relationship)
 
         go_id_parent_ids_map.update(fetch_result)
 
@@ -763,7 +767,7 @@ class FunctionalEnrichmentUtil:
         filter_ref_features = params.get('filter_ref_features', False)
         statistical_significance = params.get('statistical_significance', 'left_tailed')
         ignore_go_term_not_in_feature_set = params.get('ignore_go_term_not_in_feature_set', True)
-
+        translate_ids=params.get('translate_ids', True)
         result_directory = os.path.join(self.scratch, str(uuid.uuid4()))
         self._mkdir_p(result_directory)
 
