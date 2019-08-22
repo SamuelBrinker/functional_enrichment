@@ -654,8 +654,8 @@ class FunctionalEnrichmentUtil:
         return list(set(grand_parent_ids))
 
 
-    def _fetch_all_parents_go_ids(self, ontology_hash, go_ids, is_a_relationship=True,
-                                  regulates_relationship=True, part_of_relationship,orthology_type=False):
+    def _fetch_all_parents_go_ids(self, ontology_hash, go_ids,orthology_type, is_a_relationship=True,
+                                  regulates_relationship=True, part_of_relationship=False):
         '''
         _fetch_all_parents_go_ids: recusively fetch all parent go_ids
         '''
@@ -694,7 +694,7 @@ class FunctionalEnrichmentUtil:
 
         go_id_parent_ids_map = {}
 
-        fetch_result = self._fetch_all_parents_go_ids(ontology_hash, go_ids, is_a_relationship, regulates_relationship, part_of_relationship,orthology_type)
+        fetch_result = self._fetch_all_parents_go_ids(ontology_hash, go_ids,orthology_type, is_a_relationship, regulates_relationship, part_of_relationship)
 
         go_id_parent_ids_map.update(fetch_result)
 
