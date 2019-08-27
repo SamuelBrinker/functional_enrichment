@@ -707,7 +707,7 @@ class FunctionalEnrichmentUtil:
         go_id_parent_ids_map = {}
 
         fetch_result = self._fetch_all_parents_go_ids(ontology_hash, go_ids,orthology_type,translate_ids, is_a_relationship, regulates_relationship, part_of_relationship)
-        print len(fetch_result)
+        print(len(fetch_result))
         go_id_parent_ids_map.update(fetch_result)
 
         end = time.time()
