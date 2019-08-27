@@ -301,15 +301,15 @@ class FunctionalEnrichmentUtil:
                     elif orthology_type=='MetaCyc' and  re.match('RXN.*', ontology_id):
                         go_id_go_term_map.update({ontology_id: ontology_term})
                         go_id_list.append(ontology_id)
-                    elif orthology_type=='Kegg' and  re.match('R\d.*', ontology_id):
+                    elif orthology_type=='Kegg' and  re.match('R[0-9]\d.*', ontology_term):
                         go_id_go_term_map.update({ontology_id: ontology_term})
                         go_id_list.append(ontology_id)
-                    elif orthology_type=='EC' and re.match('\d\..*', ontology_id) and not re.match('RXN.*', ontology_id):
+                    elif orthology_type=='EC' and  re.findall('[0-9]\..*', ontology_id) !=[] and not re.match('RXN.*', ontology_id):
                         go_id_go_term_map.update({ontology_id: ontology_term})
                         go_id_list.append(ontology_id)
                     elif orthology_type=='all_terms' and (re.match('[gG][oO]\:.*', ontology_id) or
-                                    re.match('RXN.*', ontology_id) or re.match('R\d.*', ontology_id)
-                                    or re.match('\d\..*', ontology_id)):
+                                    re.match('RXN.*', ontology_id) or  re.match('R[0-9]\d.*', ontology_term)
+                                    or  re.findall('[0-9]\..*', ontology_id) !=[]):
                         go_id_go_term_map.update({ontology_id: ontology_term})
                         go_id_list.append(ontology_id)
 
