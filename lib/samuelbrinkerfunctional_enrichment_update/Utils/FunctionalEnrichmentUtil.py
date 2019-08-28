@@ -835,8 +835,14 @@ class FunctionalEnrichmentUtil:
 
         #print(go_id_parent_ids_map)
         test=True
+        test2=True
+
         log('including parents to feature id map')
         for go_id, parent_ids in go_id_parent_ids_map.items():
+            if test2 ==True and parent_ids:
+                test2=False
+                print 'eatas'
+
             mapped_features = go_id_feature_id_list_map.get(go_id)
             if test==True:
                 if len(mapped_features)>0:
@@ -876,7 +882,8 @@ class FunctionalEnrichmentUtil:
             c = len(mapped_features) - a
             # not in feature_set doesn't match go_id
             d = len(feature_ids) - len(feature_set_ids) - c
-
+            if go_id=='1.6.5.2':
+                print(a,b,c,d)
             fisher_value = fisher.pvalue(a, b, c, d)
             if statistical_significance == 'left_tailed':
                 raw_p_value = self._round(fisher_value.left_tail)
