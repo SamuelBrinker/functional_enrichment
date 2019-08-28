@@ -829,10 +829,15 @@ class FunctionalEnrichmentUtil:
             for go_id in go_id_go_term_map.keys():
                 go_id_parent_ids_map.update({go_id: []})
 
+        print(go_id_parent_ids_map)
+        test=True
         log('including parents to feature id map')
         for go_id, parent_ids in go_id_parent_ids_map.items():
             mapped_features = go_id_feature_id_list_map.get(go_id)
-
+            if test==True:
+                if len(mapped_features)>0:
+                    print('test')
+                    test=False
             for parent_id in parent_ids:
                 parent_mapped_features = go_id_feature_id_list_map.get(parent_id)
 
@@ -884,7 +889,7 @@ class FunctionalEnrichmentUtil:
 
         stats = importr('stats')
         adjusted_p_values = stats.p_adjust(FloatVector(all_raw_p_value), method='fdr')
-        print(ontology_hash)
+        #print(ontology_hash)
         for go_id, go_info in go_info_map.items():
             #if go_id not in ontology_hash:
             #    continue
