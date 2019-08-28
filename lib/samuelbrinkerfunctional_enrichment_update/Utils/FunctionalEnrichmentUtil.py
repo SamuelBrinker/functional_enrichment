@@ -283,7 +283,7 @@ class FunctionalEnrichmentUtil:
         go_id_feature_id_list_map = {}
         go_id_go_term_map = {}
         feature_id_feature_info_map = {}
-
+        print(len(genome_features))
         for genome_feature in genome_features:
             feature_id = genome_feature.get('feature_id')
             feature_func = genome_feature.get('function')
@@ -808,7 +808,7 @@ class FunctionalEnrichmentUtil:
                     feature_ids.append(feature_id)
         else:
             feature_ids = list(feature_id_go_id_list_map.keys())
-
+        print('asdas', len(feature_ids))
         ontology_hash = dict()
 
 
@@ -884,7 +884,7 @@ class FunctionalEnrichmentUtil:
             # not in feature_set matches go_id
             c = len(mapped_features) - a
             # not in feature_set doesn't match go_id
-            d = abs( len(feature_ids) - len(feature_set_ids) - c )
+            d = ( len(feature_ids) - len(feature_set_ids) - c )
             if go_id=='1.6.5.2':
                 print(a,b,c,d)
             fisher_value = fisher.pvalue(a, b, c, d)
