@@ -841,7 +841,7 @@ class FunctionalEnrichmentUtil:
         for go_id, parent_ids in go_id_parent_ids_map.items():
             if test2 ==True and parent_ids:
                 test2=False
-                print 'eatas'
+                print('eatas')
 
             mapped_features = go_id_feature_id_list_map.get(go_id)
             if test==True:
