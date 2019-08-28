@@ -307,7 +307,7 @@ class FunctionalEnrichmentUtil:
                     elif orthology_type=='EC' and  re.findall('[0-9]\..*', ontology_id) !=[] and not re.match('RXN.*', ontology_id):
                         go_id_go_term_map.update({ontology_id: ontology_term})
                         go_id_list.append(ontology_id)
-                    elif orthology_type=='all_terms' and (re.match('[gG][oO]\:.*', ontology_id) or
+                    elif orthology_type=='all_terms' and ( re.match('[gG][oO].*', ontology_id) or
                                     re.match('RXN.*', ontology_id) or  re.match('R[0-9]\d.*', ontology_term)
                                     or  re.findall('[0-9]\..*', ontology_id) !=[]):
                         go_id_go_term_map.update({ontology_id: ontology_term})
@@ -466,8 +466,12 @@ class FunctionalEnrichmentUtil:
 
         #ecs=list(ontology_hash.keys())
         ec_id_parent_id={}
+        test=True
         print("Getting EC Parents")
         for ec in ecs:
+            if  test==True and '-' in ec:
+                test=False
+                print('ec test')
             split_ec=ec.split('.')
             while len(split_ec)<4:
                 split_ec.append('-')
@@ -829,7 +833,7 @@ class FunctionalEnrichmentUtil:
             for go_id in go_id_go_term_map.keys():
                 go_id_parent_ids_map.update({go_id: []})
 
-        print(go_id_parent_ids_map)
+        #print(go_id_parent_ids_map)
         test=True
         log('including parents to feature id map')
         for go_id, parent_ids in go_id_parent_ids_map.items():
