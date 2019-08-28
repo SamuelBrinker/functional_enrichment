@@ -884,7 +884,7 @@ class FunctionalEnrichmentUtil:
             # not in feature_set matches go_id
             c = len(mapped_features) - a
             # not in feature_set doesn't match go_id
-            d = len(feature_ids) - len(feature_set_ids) - c
+            d = abs( len(feature_ids) - len(feature_set_ids) - c )
             if go_id=='1.6.5.2':
                 print(a,b,c,d)
             fisher_value = fisher.pvalue(a, b, c, d)
