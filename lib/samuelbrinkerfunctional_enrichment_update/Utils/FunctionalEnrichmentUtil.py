@@ -841,7 +841,7 @@ class FunctionalEnrichmentUtil:
             if test==True:
                 if len(mapped_features)>0:
                     print('test',go_id, mapped_features)
-                    print(go_id_parent_ids_map(go_id))
+                    print(go_id_parent_ids_map[go_id])
                     for parent_id in parent_ids:
                         parent_mapped_features = go_id_feature_id_list_map.get(parent_id)
                         print(parent_mapped_features)
