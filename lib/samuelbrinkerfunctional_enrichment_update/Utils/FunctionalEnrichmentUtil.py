@@ -889,14 +889,14 @@ class FunctionalEnrichmentUtil:
                 continue
 
             adjusted_p_value = self._round(adjusted_p_values[go_info.get('pos')])
-            namespace = ontology_hash[go_id]['namespace']        ############################## prob change below
+            namespace = go_id#ontology_hash[go_id]['namespace']        ############################## prob change below
             enrichment_map.update({go_id: {'raw_p_value': go_info.get('raw_p_value'),
                                            'adjusted_p_value': adjusted_p_value,
                                            'num_in_ref_genome': go_info.get('num_in_ref_genome'),
                                            'num_in_subset_feature_set':
                                            go_info.get('num_in_subset_feature_set'),
                                            'go_term': go_id_go_term_map.get(go_id),
-                                           'namespace': namespace.split("_")[1][0].upper(),
+                                           'namespace': namespace #.split("_")[1][0].upper(),
                                            'mapped_features': go_info.get('mapped_features')}})
 
         returnVal = {'result_directory': result_directory}
