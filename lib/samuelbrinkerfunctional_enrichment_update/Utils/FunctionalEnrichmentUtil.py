@@ -851,6 +851,7 @@ class FunctionalEnrichmentUtil:
         pos = 0
         for go_id, go_term in go_id_go_term_map.items():
             mapped_features = go_id_feature_id_list_map.get(go_id)
+
             # in feature_set matches go_id
             a = len(set(mapped_features).intersection(feature_set_ids))
             # ignore go term analysis if not associated with FeatureSet
@@ -883,20 +884,33 @@ class FunctionalEnrichmentUtil:
 
         stats = importr('stats')
         adjusted_p_values = stats.p_adjust(FloatVector(all_raw_p_value), method='fdr')
-
+        print(ontology_hash)
         for go_id, go_info in go_info_map.items():
-            if go_id not in ontology_hash:
-                continue
+            #if go_id not in ontology_hash:
+            #    continue
 
             adjusted_p_value = self._round(adjusted_p_values[go_info.get('pos')])
-            namespace = go_id#ontology_hash[go_id]['namespace']        ############################## prob change below
-            enrichment_map.update({go_id: {'raw_p_value': go_info.get('raw_p_value'),
+            #namespace = ontology_hash[go_id]['namespace']        ############################## prob change below
+            try:
+                enrichment_map.update({go_id: {'raw_p_value': go_info.get('raw_p_value'),
                                            'adjusted_p_value': adjusted_p_value,
                                            'num_in_ref_genome': go_info.get('num_in_ref_genome'),
                                            'num_in_subset_feature_set':
                                            go_info.get('num_in_subset_feature_set'),
                                            'go_term': go_id_go_term_map.get(go_id),
-                                           'namespace': namespace #.split("_")[1][0].upper(),
+                                           'namespace': go_id.upper(),
+                                           'mapped_features': go_info.get('mapped_features',[''])}})
+            except:
+                if go_id not in ontology_hash:
+                    continue
+                namespace = ontology_hash[go_id]['namespace']
+                enrichment_map.update({go_id: {'raw_p_value': go_info.get('raw_p_value'),
+                                           'adjusted_p_value': adjusted_p_value,
+                                           'num_in_ref_genome': go_info.get('num_in_ref_genome'),
+                                           'num_in_subset_feature_set':
+                                           go_info.get('num_in_subset_feature_set'),
+                                           'go_term': go_id_go_term_map.get(go_id),
+                                           'namespace': namespace.split("_")[1][0].upper(),
                                            'mapped_features': go_info.get('mapped_features')}})
 
         returnVal = {'result_directory': result_directory}
