@@ -868,6 +868,9 @@ class FunctionalEnrichmentUtil:
         go_info_map = {}
         all_raw_p_value = []
         pos = 0
+        print(len(feature_set_ids), len(feature_ids))
+        print(feature_ids)
+        print(feature_set_ids)
         for go_id, go_term in go_id_go_term_map.items():
             mapped_features = go_id_feature_id_list_map.get(go_id)
 
