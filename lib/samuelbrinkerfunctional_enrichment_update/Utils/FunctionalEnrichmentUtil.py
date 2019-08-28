@@ -843,7 +843,7 @@ class FunctionalEnrichmentUtil:
                     parent_mapped_features += mapped_features
 
                 go_id_feature_id_list_map.update({parent_id: list(set(parent_mapped_features))})
-
+        print(len(go_id_feature_id_list_map))
         log('start calculating p-values')
         enrichment_map = {}
         go_info_map = {}
@@ -885,8 +885,8 @@ class FunctionalEnrichmentUtil:
         adjusted_p_values = stats.p_adjust(FloatVector(all_raw_p_value), method='fdr')
 
         for go_id, go_info in go_info_map.items():
-            if go_id not in ontology_hash:
-                continue
+            #if go_id not in ontology_hash:
+            #    continue
 
             adjusted_p_value = self._round(adjusted_p_values[go_info.get('pos')])
             namespace = ontology_hash[go_id]['namespace']        ############################## prob change below
