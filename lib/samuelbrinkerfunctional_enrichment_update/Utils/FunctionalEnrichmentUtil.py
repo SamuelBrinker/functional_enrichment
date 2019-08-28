@@ -295,7 +295,7 @@ class FunctionalEnrichmentUtil:
             go_id_list = []
             if ontology_terms:
                 for ontology_id, ontology_term in ontology_terms.items():
-                    if orthology_type=='GO' and re.match('[gG][oO]\:.*', ontology_id):
+                    if orthology_type=='GO' and re.match('[gG][oO].*', ontology_id):
                         go_id_go_term_map.update({ontology_id: ontology_term})
                         go_id_list.append(ontology_id)
                     elif orthology_type=='MetaCyc' and  re.match('RXN.*', ontology_id):
@@ -885,8 +885,8 @@ class FunctionalEnrichmentUtil:
         adjusted_p_values = stats.p_adjust(FloatVector(all_raw_p_value), method='fdr')
 
         for go_id, go_info in go_info_map.items():
-            #if go_id not in ontology_hash:
-            #    continue
+            if go_id not in ontology_hash:
+                continue
 
             adjusted_p_value = self._round(adjusted_p_values[go_info.get('pos')])
             namespace = ontology_hash[go_id]['namespace']        ############################## prob change below
