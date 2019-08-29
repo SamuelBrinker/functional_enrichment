@@ -20,6 +20,7 @@ module samuelbrinkerfunctional_enrichment_update {
 
       optional params:
       propagation: includes is_a relationship to all go terms (default is 1)
+      pathway: use Kegg pathway for analysis
       filter_ref_features: filter reference genome features with no go terms (default is 0)
       statistical_significance: parameter for statistical significance. Select one from left_tailed, right_tailed or two_tailed (default is left_tailed)
       ignore_go_term_not_in_feature_set: ignore Go term analysis if term is not associated with FeatureSet (default is 1)
@@ -29,6 +30,7 @@ module samuelbrinkerfunctional_enrichment_update {
         obj_ref feature_set_ref;
         string workspace_name;
         boolean propagation;
+        boolean pathway;
         boolean filter_ref_features;
         string statistical_significance;
         string orthology_type;
