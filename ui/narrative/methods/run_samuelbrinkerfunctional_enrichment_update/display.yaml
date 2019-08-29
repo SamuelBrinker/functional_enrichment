@@ -34,6 +34,11 @@ parameters :
       Parent-Child Term Propagation
     short-hint : |
       Apply GO term parent-child relationships to add parent term annotations.
+  pathway :
+    ui-name : |
+      Use Kegg pathway for analysis
+    short-hint : |
+      Find Kegg R0 terms that share the same metabolic pathway
   translate_ids :
     ui-name : |
       Preform enrichment between annotation formats

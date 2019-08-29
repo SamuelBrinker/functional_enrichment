@@ -45,6 +45,18 @@
       }
     },
     {
+      "id": "pathway",
+      "optional":true,
+      "advanced":false,
+      "allow_multiple":false,
+      "default_values":["1"],
+      "field_type" : "checkbox",
+      "checkbox_options":{
+          "checked_value": 1,
+          "unchecked_value": 0
+      }
+    },
+    {
       "id": "orthology_type",
       "optional": false,
       "advanced": false,
@@ -128,6 +140,10 @@
               {
                   "input_parameter" : "propagation",
                   "target_property" : "propagation"
+              },
+              {
+                  "input_parameter" : "pathway",
+                  "target_property" : "pathway"
               },
               {
                   "constant_value"  : 1,
