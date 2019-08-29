@@ -808,7 +808,7 @@ class FunctionalEnrichmentUtil:
                     feature_ids.append(feature_id)
         else:
             feature_ids = list(feature_id_go_id_list_map.keys())
-        print('asdas', len(feature_ids))
+        #print('asdas', len(feature_ids))
         ontology_hash = dict()
 
 
@@ -839,19 +839,19 @@ class FunctionalEnrichmentUtil:
 
         log('including parents to feature id map')
         for go_id, parent_ids in go_id_parent_ids_map.items():
-            if test2 ==True and parent_ids:
-                test2=False
-                print('eatas')
+            #if test2 ==True and parent_ids:
+            #    test2=False
+            #    print('eatas')
 
             mapped_features = go_id_feature_id_list_map.get(go_id)
-            if test==True:
-                if len(mapped_features)>0:
-                    print('test',go_id, mapped_features)
-                    print(go_id_parent_ids_map[go_id])
-                    for parent_id in parent_ids:
-                        parent_mapped_features = go_id_feature_id_list_map.get(parent_id)
-                        print(parent_mapped_features)
-                    test=False
+            #if test==True:
+                #if len(mapped_features)>0:
+                #    print('test',go_id, mapped_features)
+                #    print(go_id_parent_ids_map[go_id])
+                #    for parent_id in parent_ids:
+            #            parent_mapped_features = go_id_feature_id_list_map.get(parent_id)
+            #            print(parent_mapped_features)
+            #        test=False
             for parent_id in parent_ids:
                 parent_mapped_features = go_id_feature_id_list_map.get(parent_id)
 
@@ -862,15 +862,15 @@ class FunctionalEnrichmentUtil:
                     parent_mapped_features += mapped_features
 
                 go_id_feature_id_list_map.update({parent_id: list(set(parent_mapped_features))})
-        print(len(go_id_feature_id_list_map))
+        #print(len(go_id_feature_id_list_map))
         log('start calculating p-values')
         enrichment_map = {}
         go_info_map = {}
         all_raw_p_value = []
         pos = 0
         print(len(feature_set_ids), len(feature_ids))
-        print(feature_ids)
-        print(feature_set_ids)
+        #print(feature_ids)
+        #print(feature_set_ids)
         for go_id, go_term in go_id_go_term_map.items():
             mapped_features = go_id_feature_id_list_map.get(go_id)
 
@@ -914,7 +914,7 @@ class FunctionalEnrichmentUtil:
 
             adjusted_p_value = self._round(adjusted_p_values[go_info.get('pos')])
             #namespace = ontology_hash[go_id]['namespace']        ############################## prob change below
-            
+
             enrichment_map.update({go_id: {'raw_p_value': go_info.get('raw_p_value'),
                                            'adjusted_p_value': adjusted_p_value,
                                            'num_in_ref_genome': go_info.get('num_in_ref_genome'),
