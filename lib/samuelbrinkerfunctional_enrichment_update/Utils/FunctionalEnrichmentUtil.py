@@ -388,7 +388,7 @@ class FunctionalEnrichmentUtil:
 
         return parent_ids
 
-    def _get_kegg_parents(self, kegg):
+    def _get_kegg_parents(self, kegg,pathway):
         ### This file is a hierarchical map of kegg IDs
         with open('/kb/module/data/br08201.json', 'r') as f:
             kegg_reactions = json.load(f)
@@ -439,26 +439,26 @@ class FunctionalEnrichmentUtil:
                         if other_reaction in parent and other_reaction not in true_reactions:
                             true_reactions.append(other_reaction)
                 kegg_id_reaction_ids[id]=true_reactions
-
-        with open('/kb/module/data/br08901.json', 'r') as f:
-            kegg_reactions = json.load(f)
-            f.close()
-        for id in kegg:
-            true_reactions=[]
-            parrent_ids=[]
-            base_level=''
-            early_break=False
-            for cat in  kegg_reactions['children']:
-                for cat2 in cat['children']:
-                    for cat3 in cat2['children']:
-                        if id.replace('R','') in str(cat3['name']):
-                            for cat_check in cat2['children']:
-                                for all_id in kegg:
-                                    if all_id.replace('R','') in str(cat_check['name']) and all_id !=id:
-                                        if id not in kegg_id_reaction_ids.keys():
-                                            kegg_id_reaction_ids[id]=[all_id]
-                                        elif all_id not in kegg_id_reaction_ids[id]:
-                                            kegg_id_reaction_ids[id]=kegg_id_reaction_ids[id] +[all_id]
+        if pathway==True:
+            with open('/kb/module/data/br08901.json', 'r') as f:
+                kegg_reactions = json.load(f)
+                f.close()
+            for id in kegg:
+                true_reactions=[]
+                parrent_ids=[]
+                base_level=''
+                early_break=False
+                for cat in  kegg_reactions['children']:
+                    for cat2 in cat['children']:
+                        for cat3 in cat2['children']:
+                            if id.replace('R','') in str(cat3['name']):
+                                for cat_check in cat2['children']:
+                                    for all_id in kegg:
+                                        if all_id.replace('R','') in str(cat_check['name']) and all_id !=id:
+                                            if id not in kegg_id_reaction_ids.keys():
+                                                kegg_id_reaction_ids[id]=[all_id]
+                                            elif all_id not in kegg_id_reaction_ids[id]:
+                                                kegg_id_reaction_ids[id]=kegg_id_reaction_ids[id] +[all_id]
 
         return kegg_id_reaction_ids
 
@@ -528,7 +528,7 @@ class FunctionalEnrichmentUtil:
         return metacyc_id_pathway_id
 
 
-    def _parents_from_all_terms(self, ontology_hash, translate_ids, is_a_relationship=True, regulates_relationship=True, part_of_relationship=False):
+    def _parents_from_all_terms(self, ontology_hash, translate_ids, pathway, is_a_relationship=True, regulates_relationship=True, part_of_relationship=False):
 
         all_ids=list(ontology_hash.keys())
         go_ids=[]
@@ -575,7 +575,7 @@ class FunctionalEnrichmentUtil:
                 go_reactions= self._translate_terms( list(go_parents.keys()) , table )
 
         if kegg_ids!=[]:
-            kegg_parents= self._get_kegg_parents(kegg_ids)
+            kegg_parents= self._get_kegg_parents(kegg_ids, pathway)
             if translate_ids:
                 with open('/kb/module/data/KEGG_RXN.ModelSEED.json', 'r') as f:
                     table = json.load(f)
@@ -669,7 +669,7 @@ class FunctionalEnrichmentUtil:
         return list(set(grand_parent_ids))
 
 
-    def _fetch_all_parents_go_ids(self, ontology_hash, go_ids,orthology_type, translate_ids, is_a_relationship=True,
+    def _fetch_all_parents_go_ids(self, ontology_hash, go_ids,orthology_type, translate_ids, pathway, is_a_relationship=True,
                                   regulates_relationship=True, part_of_relationship=False):
         '''
         _fetch_all_parents_go_ids: recusively fetch all parent go_ids
@@ -684,7 +684,7 @@ class FunctionalEnrichmentUtil:
 
         elif orthology_type=='Kegg':
             kegg=list(ontology_hash.keys())
-            return self._get_kegg_parents(go_ids)
+            return self._get_kegg_parents(go_ids, pathway)
         elif orthology_type=='EC':
             #ecs=list(ontology_hash.keys())
             return self._get_ec_parents(go_ids)
@@ -697,7 +697,7 @@ class FunctionalEnrichmentUtil:
         else:
             return {go_id: []}
 
-    def _generate_parent_child_map(self, ontology_hash, go_ids,orthology_type,translate_ids,
+    def _generate_parent_child_map(self, ontology_hash, go_ids,orthology_type,translate_ids,pathway,
                                    is_a_relationship=True,
                                    regulates_relationship=True,
                                    part_of_relationship=False):
@@ -710,7 +710,7 @@ class FunctionalEnrichmentUtil:
 
         go_id_parent_ids_map = {}
 
-        fetch_result = self._fetch_all_parents_go_ids(ontology_hash, go_ids,orthology_type,translate_ids, is_a_relationship, regulates_relationship, part_of_relationship)
+        fetch_result = self._fetch_all_parents_go_ids(ontology_hash, go_ids,orthology_type,translate_ids,pathway, is_a_relationship, regulates_relationship, part_of_relationship)
         print(len(fetch_result))
         go_id_parent_ids_map.update(fetch_result)
 
@@ -772,6 +772,7 @@ class FunctionalEnrichmentUtil:
         statistical_significance = params.get('statistical_significance', 'left_tailed')
         ignore_go_term_not_in_feature_set = params.get('ignore_go_term_not_in_feature_set', True)
         translate_ids=params.get('translate_ids', True)
+        pathway=params.get('pathway', True)
         result_directory = os.path.join(self.scratch, str(uuid.uuid4()))
         self._mkdir_p(result_directory)
 
@@ -826,7 +827,7 @@ class FunctionalEnrichmentUtil:
 
         if propagation:
             go_id_parent_ids_map = self._generate_parent_child_map(ontology_hash,
-                                                                   list(go_id_go_term_map.keys()),orthology_type,translate_ids,
+                                                                   list(go_id_go_term_map.keys()),orthology_type,translate_ids,pathway,
                                                                    regulates_relationship=False)
         else:
             go_id_parent_ids_map = {}
