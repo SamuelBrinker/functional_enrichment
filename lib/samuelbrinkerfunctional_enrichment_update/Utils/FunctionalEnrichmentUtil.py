@@ -364,8 +364,8 @@ class FunctionalEnrichmentUtil:
         """
         parent_ids = []
 
-        hash = go_dictionary.get('term_hash', {})
-        antology_info=hash.get(go_id, {})
+        #hash = go_dictionary.get('term_hash', {})
+        antology_info=go_dictionary.get(go_id, {})
         if is_a_relationship:
             is_a_parents = antology_info.get('is_a')
             if is_a_parents:
@@ -567,8 +567,9 @@ class FunctionalEnrichmentUtil:
             with open('/kb/module/data/GO_ontologyDictionary.json', 'r') as f:
                 go_dictionary = json.load(f)
                 f.close()
+            antology_info=go_dictionary.get(go_id, {})
             for go_id in go_ids:
-                go_parents[go_id]=self._get_go_parents(go_dictionary, go_id,
+                go_parents[go_id]=self._get_go_parents(antology_info, go_id,
                                                          is_a_relationship, regulates_relationship,
                                                          part_of_relationship)
             if translate_ids:
@@ -685,6 +686,7 @@ class FunctionalEnrichmentUtil:
                 with open('/kb/module/data/GO_ontologyDictionary.json', 'r') as f:
                     go_dictionary = json.load(f)
                     f.close()
+                antology_info=go_dictionary.get(go_id, {})
                 fetch_result[go_id]=self._get_go_parents(go_dictionary, go_id, is_a_relationship, regulates_relationship, part_of_relationship)
 
             return fetch_result
