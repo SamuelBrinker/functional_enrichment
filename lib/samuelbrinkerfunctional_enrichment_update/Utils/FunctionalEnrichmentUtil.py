@@ -357,14 +357,15 @@ class FunctionalEnrichmentUtil:
 
 
         #####################################################
-    def _get_immediate_parents(self, ontology_hash, go_id, is_a_relationship=True,
+    def _get_immediate_parents(self, go_dictionary, go_id, is_a_relationship=True,
                                regulates_relationship=True, part_of_relationship=False):
         """
         _get_immediate_parents: get immediate parents go_ids for a given go_id
         """
         parent_ids = []
-        antology_info = ontology_hash.get(go_id, {})
 
+        hash = go_dictionary.get('term_hash', {})
+        antology_info=hash.get(go_id, {})
         if is_a_relationship:
             is_a_parents = antology_info.get('is_a')
             if is_a_parents:
@@ -528,9 +529,9 @@ class FunctionalEnrichmentUtil:
         return metacyc_id_pathway_id
 
 
-    def _parents_from_all_terms(self, ontology_hash, translate_ids, pathway, is_a_relationship=True, regulates_relationship=True, part_of_relationship=False):
+    def _parents_from_all_terms(self, go_ids, translate_ids, pathway, is_a_relationship=True, regulates_relationship=True, part_of_relationship=False):
 
-        all_ids=list(ontology_hash.keys())
+        all_ids=go_ids
         go_ids=[]
         kegg_ids=[]
         metacyc_ids=[]
@@ -563,8 +564,11 @@ class FunctionalEnrichmentUtil:
         if go_ids!=[]:
             go_parents={}
             print("Getting GO Parents")
+            with open('/kb/module/data/GO_ontologyDictionary.json', 'r') as f:
+                go_dictionary = json.load(f)
+                f.close()
             for go_id in go_ids:
-                go_parents[go_id]=self._get_go_parents(ontology_hash, go_id,
+                go_parents[go_id]=self._get_go_parents(go_dictionary, go_id,
                                                          is_a_relationship, regulates_relationship,
                                                          part_of_relationship)
             if translate_ids:
@@ -651,17 +655,17 @@ class FunctionalEnrichmentUtil:
 
 
 
-    def _get_go_parents(self, ontology_hash, go_id, is_a_relationship=True,
+    def _get_go_parents(self, go_dictionary, go_id, is_a_relationship=True,
                             regulates_relationship=True, part_of_relationship=False):
 
         grand_parent_ids=[]
-        parent_ids = self._get_immediate_parents(ontology_hash, go_id,
+        parent_ids = self._get_immediate_parents(go_dictionary, go_id,
                                                  is_a_relationship, regulates_relationship,
                                                  part_of_relationship)
         if parent_ids:
             grand_parent_ids = parent_ids
             for parent_id in parent_ids:
-                grand_parent_ids += self._get_go_parents(ontology_hash, parent_id,
+                grand_parent_ids += self._get_go_parents(go_dictionary, parent_id,
                                                          is_a_relationship, regulates_relationship,
                                                          part_of_relationship)
 
@@ -669,7 +673,7 @@ class FunctionalEnrichmentUtil:
         return list(set(grand_parent_ids))
 
 
-    def _fetch_all_parents_go_ids(self, ontology_hash, go_ids,orthology_type, translate_ids, pathway, is_a_relationship=True,
+    def _fetch_all_parents_go_ids(self, go_ids,orthology_type, translate_ids, pathway, is_a_relationship=True,
                                   regulates_relationship=True, part_of_relationship=False):
         '''
         _fetch_all_parents_go_ids: recusively fetch all parent go_ids
@@ -678,12 +682,15 @@ class FunctionalEnrichmentUtil:
         if orthology_type=='GO':
             print("Getting GO Parents")
             for go_id in go_ids:
-                fetch_result[go_id]=self._get_go_parents(ontology_hash, go_id, is_a_relationship, regulates_relationship, part_of_relationship)
+                with open('/kb/module/data/GO_ontologyDictionary.json', 'r') as f:
+                    go_dictionary = json.load(f)
+                    f.close()
+                fetch_result[go_id]=self._get_go_parents(go_dictionary, go_id, is_a_relationship, regulates_relationship, part_of_relationship)
 
             return fetch_result
 
         elif orthology_type=='Kegg':
-            kegg=list(ontology_hash.keys())
+            ##kegg=list(ontology_hash.keys())
             return self._get_kegg_parents(go_ids, pathway)
         elif orthology_type=='EC':
             #ecs=list(ontology_hash.keys())
@@ -692,12 +699,12 @@ class FunctionalEnrichmentUtil:
             #metacyc=list(ontology_hash.keys())
             return self._get_metacyc_reactions(go_ids)
         elif orthology_type=='all_terms':
-            return self._parents_from_all_terms(ontology_hash, translate_ids, is_a_relationship,
+            return self._parents_from_all_terms(go_ids, translate_ids, is_a_relationship,
                                           regulates_relationship, part_of_relationship)
         else:
             return {go_id: []}
 
-    def _generate_parent_child_map(self, ontology_hash, go_ids,orthology_type,translate_ids,pathway,
+    def _generate_parent_child_map(self, go_ids,orthology_type,translate_ids,pathway,
                                    is_a_relationship=True,
                                    regulates_relationship=True,
                                    part_of_relationship=False):
@@ -710,7 +717,7 @@ class FunctionalEnrichmentUtil:
 
         go_id_parent_ids_map = {}
 
-        fetch_result = self._fetch_all_parents_go_ids(ontology_hash, go_ids,orthology_type,translate_ids,pathway, is_a_relationship, regulates_relationship, part_of_relationship)
+        fetch_result = self._fetch_all_parents_go_ids( go_ids,orthology_type,translate_ids,pathway, is_a_relationship, regulates_relationship, part_of_relationship)
         print(len(fetch_result))
         go_id_parent_ids_map.update(fetch_result)
 
@@ -777,7 +784,7 @@ class FunctionalEnrichmentUtil:
         self._mkdir_p(result_directory)
 
 
-        print(orthology_type)
+        #print(orthology_type)
 
         feature_set_ids, genome_ref = self._process_feature_set(params.get('feature_set_ref'))
 
@@ -810,7 +817,7 @@ class FunctionalEnrichmentUtil:
         else:
             feature_ids = list(feature_id_go_id_list_map.keys())
         #print('asdas', len(feature_ids))
-        ontology_hash = dict()
+        #ontology_hash = dict()
 
 
         ############################################################
@@ -818,15 +825,15 @@ class FunctionalEnrichmentUtil:
         ############################################################
 
 
-        ontologies = self.ws.get_objects([{'workspace': 'KBaseOntology',
-                                           'name': 'gene_ontology'},
-                                          {'workspace': 'KBaseOntology',
-                                           'name': 'plant_ontology'}])
-        ontology_hash.update(ontologies[0]['data']['term_hash'])
-        ontology_hash.update(ontologies[1]['data']['term_hash'])
+        #ontologies = self.ws.get_objects([{'workspace': 'KBaseOntology',
+        #                                   'name': 'gene_ontology'},
+        #                                  {'workspace': 'KBaseOntology',
+        #                                   'name': 'plant_ontology'}])
+        #ontology_hash.update(ontologies[0]['data']['term_hash'])
+        #ontology_hash.update(ontologies[1]['data']['term_hash'])
 
         if propagation:
-            go_id_parent_ids_map = self._generate_parent_child_map(ontology_hash,
+            go_id_parent_ids_map = self._generate_parent_child_map(
                                                                    list(go_id_go_term_map.keys()),orthology_type,translate_ids,pathway,
                                                                    regulates_relationship=False)
         else:
@@ -869,7 +876,7 @@ class FunctionalEnrichmentUtil:
         go_info_map = {}
         all_raw_p_value = []
         pos = 0
-        print(len(feature_set_ids), len(feature_ids))
+        print('# IDs in Genome: ',len(feature_ids),'\n# IDs in feature set: ', len(feature_set_ids))
         #print(feature_ids)
         #print(feature_set_ids)
         for go_id, go_term in go_id_go_term_map.items():
